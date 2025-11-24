@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
-    command: ["npm", "run", "db:seed"]
+    command: ["sh", "-c", "npx prisma db push && npm run db:seed"]
     environment:
       - DATABASE_URL=file:/app/prisma/dev.db
     volumes:
