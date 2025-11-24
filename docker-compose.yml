@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  seed:
+    # Usa la etapa builder para tener prisma/tsx disponibles y ejecutar el seed
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: ["npm", "run", "db:seed"]
+    volumes:
+      - ./prisma/dev.db:/app/prisma/dev.db
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tienda-uaemex
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persistimos y exponemos la base de datos SQLite para que Prisma la encuentre y puedas inspeccionarla fuera del contenedor
+      - ./prisma/dev.db:/app/prisma/dev.db
+    restart: unless-stopped
+
+  studio:
+    # Servicio opcional para abrir Prisma Studio en http://localhost:5555
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: ["npx", "prisma", "studio", "--schema", "prisma/schema.prisma", "--hostname", "0.0.0.0", "--port", "5555"]
+    volumes:
+      - ./prisma/dev.db:/app/prisma/dev.db
+    ports:
+      - "5555:5555"
+    restart: unless-stopped

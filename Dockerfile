@@ -17,6 +17,7 @@ RUN npm ci
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npx prisma generate
 RUN npm run build
 
 FROM base AS runner
@@ -27,6 +28,9 @@ WORKDIR /app
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# Incluimos la base SQLite, el esquema y los artefactos generados de Prisma/otros libs
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
 USER nextjs
 EXPOSE 8080
 CMD ["/bin/sh", "-c", "IP=$(hostname -i); echo \"Server available at http://$IP:${PORT:-8080}\"; exec node server.js"]
