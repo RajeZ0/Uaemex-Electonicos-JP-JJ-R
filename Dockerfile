@@ -5,6 +5,8 @@ FROM node:${NODE_VERSION}-alpine AS base
 
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+# Valor por defecto para SQLite; puede ser sobrescrito por compose/entorno
+ENV DATABASE_URL="file:./prisma/dev.db"
 
 RUN apk add --no-cache libc6-compat curl
 

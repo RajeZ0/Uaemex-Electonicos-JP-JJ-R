@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
       target: builder
     command: ["npm", "run", "db:seed"]
+    environment:
+      - DATABASE_URL=file:./prisma/dev.db
     volumes:
       - ./prisma/dev.db:/app/prisma/dev.db
     restart: "no"
@@ -20,6 +22,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
+      - DATABASE_URL=file:./prisma/dev.db
     depends_on:
       seed:
         condition: service_completed_successfully
@@ -37,6 +40,8 @@ services:
       dockerfile: Dockerfile
       target: builder
     command: ["npx", "prisma", "studio", "--schema", "prisma/schema.prisma", "--hostname", "0.0.0.0", "--port", "5555"]
+    environment:
+      - DATABASE_URL=file:./prisma/dev.db
     volumes:
       - ./prisma/dev.db:/app/prisma/dev.db
     ports:
