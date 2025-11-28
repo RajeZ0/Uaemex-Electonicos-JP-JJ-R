@@ -1,6 +1,6 @@
 # Uaemex-Electonicos-JP-JJ-R
 
-Aplicación web para la tienda de componentes electrónicos de la Facultad de Ingeniería de la UAEMéx. El proyecto está construido sobre Next.js 15 con TypeScript y Tailwind CSS, e integra una base de datos PostgreSQL gestionada mediante Prisma para almacenar el catálogo, ofertas y pedidos.
+Aplicación web para la tienda de componentes electrónicos de la Facultad de Ingeniería de la UAEMéx. El proyecto está construido sobre Next.js 15 con TypeScript y Tailwind CSS, e integra una base de datos PostgreSQL gestionada mediante Prisma para almacenar el catálogo, ofertas y pedidos. https://proyectotecnologias-1.onrender.com
 
 ##  Stack principal
 
